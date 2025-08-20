@@ -27,7 +27,7 @@ func _ready():
 
 
 func _on_option_pressed():
-	_open_sub_menu($Options)
+	_open_sub_menu($Option)
 
 
 func _on_back_pressed():
