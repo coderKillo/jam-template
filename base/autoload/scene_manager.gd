@@ -50,16 +50,19 @@ func level_size() -> int:
 
 func load_level(level: int):
 	assert(level < level_size())
+	GameState.set_current_level(level)
+	load_level_scene(scene_resource.levels[level])
+
+
+func load_level_scene(level_scene: PackedScene):
 	if not is_instance_valid(main):
 		load_game_scene()
-
-	GameState.set_current_level(level)
 
 	if is_instance_valid(current_level):
 		current_level.queue_free()
 		current_level = null
 
-	current_level = scene_resource.levels[level].instantiate()
+	current_level = level_scene.instantiate()
 
 	if is_instance_valid(main.level_container):
 		main.level_container.call_deferred("add_child", current_level)

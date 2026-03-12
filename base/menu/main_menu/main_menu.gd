@@ -15,9 +15,11 @@ func _ready():
 	%Quit.pressed.connect(_on_quit_pressed)
 	%Back.pressed.connect(_on_back_pressed)
 
+	%Feedback.pressed.connect(_on_feedback_pressed)
+
 	$ConfimNewGame.confirmed.connect(_on_new_game_confirmed)
 
-	$Version.text = GameState.get_version()
+	%Version.text = GameState.get_version()
 
 	if OS.has_feature("web"):
 		%Quit.hide()
@@ -56,6 +58,11 @@ func _on_level_select_pressed():
 
 func _on_quit_pressed():
 	get_tree().quit()
+
+
+func _on_feedback_pressed():
+	#TODO: open google docs
+	pass
 
 
 ## Helper
