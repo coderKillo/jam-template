@@ -12,6 +12,7 @@ func _ready():
 	if not is_instance_valid(SceneManager.main) and debug_level:
 		await get_tree().root.ready
 		SceneManager.load_level_scene(debug_level)
+	SceneManager.main = self
 
 
 func _process(_delta):
