@@ -1,5 +1,7 @@
 extends Node
 
+const SINGLE_GAME_SCENE = true
+
 @onready var scene_resource: SceneResource = preload("res://base/core/scenes/scenes.tres")
 
 var main: Main
@@ -19,11 +21,19 @@ func _ready():
 
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_released("ui_cancel"):
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
 		_pause_game()
 
 
 func load_game_scene():
+	if SINGLE_GAME_SCENE:
+		if _in_transition:
+			return
+
+		_in_transition = true
+		await _do_transition(true)
+
 	main = scene_resource.main_scene.instantiate()
 	var tree = get_tree()
 	var current_scene = tree.current_scene
@@ -32,6 +42,10 @@ func load_game_scene():
 	tree.root.remove_child(current_scene)
 	current_scene.queue_free()
 	tree.current_scene = main
+
+	if SINGLE_GAME_SCENE:
+		await _do_transition(false)
+		_in_transition = false
 
 
 func load_main_menu():
@@ -49,10 +63,18 @@ func load_main_menu():
 
 
 func reload_level():
+	if SINGLE_GAME_SCENE:
+		load_game_scene()
+		return
+
 	load_level(GameState.get_current_level())
 
 
 func advance_level():
+	if SINGLE_GAME_SCENE:
+		load_game_scene()
+		return
+
 	var next_level = GameState.get_current_level() + 1
 	if next_level >= level_size():
 		return
@@ -65,12 +87,20 @@ func level_size() -> int:
 
 
 func load_level(level: int):
+	if SINGLE_GAME_SCENE:
+		load_game_scene()
+		return
+
 	assert(level < level_size())
 	GameState.set_current_level(level)
 	load_level_scene(scene_resource.levels[level])
 
 
 func load_level_scene(level_scene: PackedScene):
+	if SINGLE_GAME_SCENE:
+		load_game_scene()
+		return
+
 	if _in_transition:
 		return
 
