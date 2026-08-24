@@ -15,11 +15,6 @@ extends Button
 @export var time := 1.2
 
 
-func _ready():
-	$Content/Button.text = text
-	$Content.pivot_offset = size / 2.0
-
-
 func _enter_tree():
 	AnimationController.register_button(self)
 

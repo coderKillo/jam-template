@@ -11,21 +11,25 @@ func register_button(button: AnimatedButton) -> void:
 
 
 func _on_mouse_entered(node: AnimatedButton) -> void:
-	_do_animation(node, "scale", node.scale_normal, node.scale_up, node.time)
+	_do_animation(node, "offset_transform_scale", node.scale_normal, node.scale_up, node.time)
 
 
 func _on_mouse_exited(node: AnimatedButton) -> void:
-	_do_animation(node, "scale", node.scale_up, node.scale_normal, node.time)
+	_do_animation(node, "offset_transform_scale", node.scale_up, node.scale_normal, node.time)
 
 
 func _on_button_down(node: AnimatedButton) -> void:
-	_do_animation(node, "scale", node.scale_normal, node.scale_pressed, node.time)
-	_do_animation(node, "rotation", node.rotation_normal, node.rotation_pressed, node.time)
+	_do_animation(node, "offset_transform_scale", node.scale_normal, node.scale_pressed, node.time)
+	_do_animation(
+		node, "offset_transform_rotation", node.rotation_normal, node.rotation_pressed, node.time
+	)
 
 
 func _on_button_up(node: AnimatedButton) -> void:
-	_do_animation(node, "scale", node.scale_pressed, node.scale_normal, node.time)
-	_do_animation(node, "rotation", node.rotation_pressed, node.rotation_normal, node.time)
+	_do_animation(node, "offset_transform_scale", node.scale_pressed, node.scale_normal, node.time)
+	_do_animation(
+		node, "offset_transform_rotation", node.rotation_pressed, node.rotation_normal, node.time
+	)
 
 
 func _do_animation(
@@ -38,7 +42,7 @@ func _do_animation(
 	tween.set_parallel(true)
 	(
 		tween
-		. tween_property(object.get_node("Content"), parameter, to, time)
+		. tween_property(object, parameter, to, time)
 		. from(from)
 		. set_trans(Tween.TRANS_ELASTIC)
 		. set_ease(Tween.EASE_OUT)
